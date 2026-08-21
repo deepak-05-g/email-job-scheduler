@@ -40,7 +40,7 @@ export class AuthController {
       res.cookie(env.SESSION_COOKIE_NAME, rawToken, {
         httpOnly: true,
         secure: env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
         path: '/',
         maxAge: env.SESSION_TTL_SECONDS * 1000,
       });
@@ -58,7 +58,7 @@ export class AuthController {
       res.status(401).json({
         error: {
           message: 'Authentication required',
-          code: 'UNAUTHORIZED',
+          code: 'UNAUTHENTICATED',
         },
       });
       return;
@@ -82,7 +82,7 @@ export class AuthController {
     res.clearCookie(env.SESSION_COOKIE_NAME, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
     });
 
