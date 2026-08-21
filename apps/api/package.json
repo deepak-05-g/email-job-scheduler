@@ -16,6 +16,7 @@
     "@email-scheduler/db": "workspace:*",
     "@email-scheduler/queue": "workspace:*",
     "@email-scheduler/shared": "workspace:*",
+    "@email-scheduler/worker": "workspace:*",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",

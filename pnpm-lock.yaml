@@ -54,6 +54,9 @@ importers:
       '@email-scheduler/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@email-scheduler/worker':
+        specifier: workspace:*
+        version: link:../worker
       '@types/cookie-parser':
         specifier: ^1.4.8
         version: 1.4.10(@types/express@5.0.6)

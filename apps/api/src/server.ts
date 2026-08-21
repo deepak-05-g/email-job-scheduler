@@ -1,6 +1,7 @@
 import { createApp } from './app.js';
 import { prisma } from '@email-scheduler/db';
 import { getSharedRedisConnection } from '@email-scheduler/queue';
+import { createWorkerInstance } from '@email-scheduler/worker';
 import { logger } from './utils/logger.js';
 
 const PORT = process.env.PORT
@@ -15,12 +16,25 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   logger.info(`API service started on port ${PORT} on 0.0.0.0`);
 });
 
+// Initialize background BullMQ queue worker
+const workerInstance = createWorkerInstance();
+logger.info('Background Email Queue Worker started alongside API server');
+
 // Graceful shutdown handling
 const handleShutdown = (signal: string) => {
   logger.info(`Received ${signal}. Shutting down API server gracefully...`);
 
   server.close(async () => {
     logger.info('HTTP server closed.');
+
+    try {
+      if (workerInstance) {
+        await workerInstance.close();
+        logger.info('Queue worker closed.');
+      }
+    } catch (err) {
+      logger.error('Error closing queue worker', { error: String(err) });
+    }
 
     try {
       await prisma.$disconnect();

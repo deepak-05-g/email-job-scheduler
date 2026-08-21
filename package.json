@@ -5,9 +5,9 @@
   "version": "1.0.0",
   "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "build": "pnpm --filter @email-scheduler/config run build && pnpm --filter @email-scheduler/shared run build && pnpm --filter @email-scheduler/db run build && pnpm --filter @email-scheduler/queue run build && pnpm --filter @email-scheduler/api run build && pnpm --filter @email-scheduler/worker run build",
+    "build": "pnpm --filter @email-scheduler/config run build && pnpm --filter @email-scheduler/shared run build && pnpm --filter @email-scheduler/db run build && pnpm --filter @email-scheduler/queue run build && pnpm --filter @email-scheduler/worker run build && pnpm --filter @email-scheduler/api run build",
     "build:all": "pnpm --recursive run build",
-    "build:api": "pnpm --filter @email-scheduler/config run build && pnpm --filter @email-scheduler/shared run build && pnpm --filter @email-scheduler/db run build && pnpm --filter @email-scheduler/queue run build && pnpm --filter @email-scheduler/api run build",
+    "build:api": "pnpm --filter @email-scheduler/config run build && pnpm --filter @email-scheduler/shared run build && pnpm --filter @email-scheduler/db run build && pnpm --filter @email-scheduler/queue run build && pnpm --filter @email-scheduler/worker run build && pnpm --filter @email-scheduler/api run build",
     "build:worker": "pnpm --filter @email-scheduler/config run build && pnpm --filter @email-scheduler/shared run build && pnpm --filter @email-scheduler/db run build && pnpm --filter @email-scheduler/queue run build && pnpm --filter @email-scheduler/worker run build",
     "lint": "eslint .",
     "typecheck": "pnpm --recursive run typecheck",
