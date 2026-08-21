@@ -8,5 +8,8 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "test": "echo \"No tests yet\""
+  },
+  "dependencies": {
+    "typescript": "^5.7.3"
   }
 }
