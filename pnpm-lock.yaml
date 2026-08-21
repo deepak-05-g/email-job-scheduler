@@ -109,9 +109,15 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.7.0(vite@6.4.3(@types/node@22.20.1)(jiti@1.21.7)(tsx@4.23.12))
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.5.4(postcss@8.5.26)
       lucide-react:
         specifier: ^0.475.0
         version: 0.475.0(react@19.2.8)
+      postcss:
+        specifier: ^8.5.1
+        version: 8.5.26
       react:
         specifier: ^19.0.0
         version: 19.2.8
@@ -121,6 +127,9 @@ importers:
       react-router-dom:
         specifier: ^7.1.5
         version: 7.18.2(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      tailwindcss:
+        specifier: ^3.4.17
+        version: 3.4.19(tsx@4.23.12)
       vite:
         specifier: ^6.0.7
         version: 6.4.3(@types/node@22.20.1)(jiti@1.21.7)(tsx@4.23.12)
@@ -137,21 +146,12 @@ importers:
       '@types/react-dom':
         specifier: ^19.0.3
         version: 19.2.4(@types/react@19.2.18)
-      autoprefixer:
-        specifier: ^10.4.20
-        version: 10.5.4(postcss@8.5.26)
       happy-dom:
         specifier: ^17.4.5
         version: 17.6.3
       jsdom:
         specifier: ^26.0.0
         version: 26.1.0
-      postcss:
-        specifier: ^8.5.1
-        version: 8.5.26
-      tailwindcss:
-        specifier: ^3.4.17
-        version: 3.4.19(tsx@4.23.12)
       typescript:
         specifier: ^5.7.3
         version: 5.9.3
