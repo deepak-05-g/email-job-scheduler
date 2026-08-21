@@ -8,7 +8,7 @@ let currentDir = process.cwd();
 while (currentDir && currentDir !== path.parse(currentDir).root) {
   const envPath = path.join(currentDir, '.env');
   if (fs.existsSync(envPath)) {
-    dotenv.config({ path: envPath, override: true });
+    dotenv.config({ path: envPath });
     break;
   }
   currentDir = path.dirname(currentDir);
