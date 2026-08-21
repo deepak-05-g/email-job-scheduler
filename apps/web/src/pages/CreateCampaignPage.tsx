@@ -149,8 +149,12 @@ export const CreateCampaignPage: React.FC = () => {
       return;
     }
 
-    const startAtIso = new Date(startAtLocal).toISOString();
-    const delayBetweenEmailsMs = Math.max(2000, Math.floor(delaySeconds * 1000));
+    // Ensure startAt is at least now if user picked past time or instant dispatch
+    const selectedTime = new Date(startAtLocal).getTime();
+    const effectiveTime = isNaN(selectedTime) || selectedTime < Date.now() ? Date.now() : selectedTime;
+    const startAtIso = new Date(effectiveTime).toISOString();
+    const delayBetweenEmailsMs = Math.max(2000, Math.floor((delaySeconds || 2) * 1000));
+    const effectiveHourlyLimit = Math.max(1, Math.floor(hourlyLimit || 100));
 
     setSubmitting(true);
 
@@ -160,7 +164,7 @@ export const CreateCampaignPage: React.FC = () => {
         body: body.trim(),
         startAt: startAtIso,
         delayBetweenEmailsMs,
-        hourlyLimit,
+        hourlyLimit: effectiveHourlyLimit,
         recipients: finalRecipients,
       });
 
@@ -175,7 +179,10 @@ export const CreateCampaignPage: React.FC = () => {
       }, 1200);
     } catch (err) {
       if (err instanceof ApiClientError) {
-        setError(err.message);
+        const details = Array.isArray(err.details)
+          ? err.details.map((d: any) => `${d.field}: ${d.message}`).join(' | ')
+          : '';
+        setError(details ? `${err.message} (${details})` : err.message);
       } else {
         setError('Failed to schedule campaign. Please check inputs and try again.');
       }

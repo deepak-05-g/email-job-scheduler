@@ -14,8 +14,8 @@ export const createCampaignSchema = z.object({
     .refine(
       (val) => {
         const date = new Date(val);
-        // Allow up to 1 minute grace period for network latency / instantaneous scheduling
-        const gracePeriod = Date.now() - 60 * 1000;
+        // Allow up to 10 minutes grace period for client-server time skew / immediate scheduling
+        const gracePeriod = Date.now() - 10 * 60 * 1000;
         return date.getTime() >= gracePeriod;
       },
       { message: 'startAt cannot be in the past' }
