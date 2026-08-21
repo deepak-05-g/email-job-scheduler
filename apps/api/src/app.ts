@@ -28,14 +28,24 @@ export const createApp = (): Express => {
   );
 
   // 3. CORS Configuration
-  const allowedOrigins = env.CORS_ORIGINS.split(',').map((o) => o.trim());
+  const allowedOrigins = [
+    ...env.CORS_ORIGINS.split(',').map((o) => o.trim()),
+    env.WEB_PUBLIC_URL.trim(),
+  ].filter(Boolean);
+
   app.use(
     cors({
       origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin) || env.NODE_ENV !== 'production') {
+        if (
+          !origin ||
+          allowedOrigins.includes(origin) ||
+          origin.endsWith('.vercel.app') ||
+          origin.includes('localhost') ||
+          env.NODE_ENV !== 'production'
+        ) {
           callback(null, true);
         } else {
-          callback(new Error('Origin not allowed by CORS'));
+          callback(new Error(`Origin ${origin} not allowed by CORS`));
         }
       },
       credentials: true,

@@ -9,7 +9,7 @@ let currentDir = process.cwd();
 while (currentDir && currentDir !== path.parse(currentDir).root) {
   const envPath = path.join(currentDir, '.env');
   if (fs.existsSync(envPath)) {
-    dotenv.config({ path: envPath, override: true });
+    dotenv.config({ path: envPath });
     break;
   }
   currentDir = path.dirname(currentDir);
@@ -24,11 +24,17 @@ export const getPgPool = (): pg.Pool => {
   if (!globalThis.__pgPool__) {
     const rawDbUrl =
       process.env.DATABASE_URL || 'postgresql://scheduler:scheduler@127.0.0.1:5433/email_scheduler';
-    const dbUrl = rawDbUrl.split('?')[0];
+    
+    const isSsl =
+      rawDbUrl.includes('sslmode=require') ||
+      rawDbUrl.includes('neon.tech') ||
+      rawDbUrl.includes('render.com') ||
+      rawDbUrl.includes('amazonaws.com') ||
+      process.env.NODE_ENV === 'production';
 
     globalThis.__pgPool__ = new pg.Pool({
-      connectionString: dbUrl,
-      ssl: false,
+      connectionString: rawDbUrl,
+      ssl: isSsl ? { rejectUnauthorized: false } : false,
       keepAlive: true,
       max: 10,
     });
