@@ -44,14 +44,14 @@ export const envSchema = z.object({
   SMTP_PORT: z.coerce.number().optional(),
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
-  SMTP_SECURE: z.coerce.boolean().optional(),
+  SMTP_SECURE: z.preprocess((val) => val === 'true' || val === true || val === '1', z.boolean()).optional(),
 
   // Ethereal SMTP Fallback for Development & Testing
   ETHEREAL_HOST: z.string().default('smtp.ethereal.email'),
   ETHEREAL_PORT: z.coerce.number().default(587),
   ETHEREAL_USER: z.string().default('hosea32@ethereal.email'),
   ETHEREAL_PASS: z.string().default('WPUNmEzYDeXA5sdcdY'),
-  ETHEREAL_SECURE: z.coerce.boolean().default(false),
+  ETHEREAL_SECURE: z.preprocess((val) => val === 'true' || val === true || val === '1', z.boolean()).default(false),
   DEFAULT_FROM_EMAIL: z.string().default('hosea32@ethereal.email'),
   DEFAULT_FROM_NAME: z.string().default('Email Scheduler'),
 

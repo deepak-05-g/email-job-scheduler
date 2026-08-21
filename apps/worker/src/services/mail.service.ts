@@ -76,7 +76,7 @@ export class MailService {
       this.transporter = nodemailer.createTransport({
         host: env.ETHEREAL_HOST || 'smtp.ethereal.email',
         port: env.ETHEREAL_PORT || 587,
-        secure: env.ETHEREAL_SECURE || false,
+        secure: env.ETHEREAL_PORT === 465,
         auth: {
           user: user || 'hosea32@ethereal.email',
           pass: pass || 'WPUNmEzYDeXA5sdcdY',
