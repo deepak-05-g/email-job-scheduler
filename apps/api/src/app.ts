@@ -51,6 +51,14 @@ export const createApp = (): Express => {
   app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
   // 5. Health & Readiness Endpoints
+  app.get('/', (_req: Request, res: Response) => {
+    res.status(200).json({
+      service: 'Email Job Scheduler API',
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+    });
+  });
+
   app.get('/health', (_req: Request, res: Response<HealthResponse>) => {
     res.status(200).json({
       status: 'ok',
