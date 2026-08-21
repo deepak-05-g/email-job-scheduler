@@ -3,14 +3,21 @@ import { Redis } from 'ioredis';
 import type { ConnectionOptions } from 'bullmq';
 
 export const getRedisUrl = (): string => {
-  return process.env.REDIS_URL || 'redis://127.0.0.1:6380';
+  return process.env.REDIS_URL || 'redis://127.0.0.1:6379';
 };
 
 export const createRedisConnection = (): Redis => {
   const redisUrl = getRedisUrl();
+  const isTls = redisUrl.startsWith('rediss://');
+
   const client = new Redis(redisUrl, {
     maxRetriesPerRequest: null,
     enableReadyCheck: false,
+    tls: isTls ? { rejectUnauthorized: false } : undefined,
+    retryStrategy(times) {
+      const delay = Math.min(times * 200, 2000);
+      return delay;
+    },
   });
 
   client.on('error', (err) => {
@@ -33,14 +40,16 @@ export const getSharedRedisConnection = (): Redis => {
 export const getBullMQConnectionOptions = (): ConnectionOptions => {
   const redisUrl = getRedisUrl();
   const parsed = new URL(redisUrl);
+  const isTls = parsed.protocol === 'rediss:';
 
   return {
     host: parsed.hostname || '127.0.0.1',
-    port: parsed.port ? parseInt(parsed.port, 10) : 6379,
+    port: parsed.port ? parseInt(parsed.port, 10) : isTls ? 6380 : 6379,
     password: parsed.password || undefined,
     username: parsed.username || undefined,
     db: parsed.pathname ? parseInt(parsed.pathname.replace('/', ''), 10) || 0 : 0,
     maxRetriesPerRequest: null,
+    tls: isTls ? { rejectUnauthorized: false } : undefined,
   };
 };
 
