@@ -7,12 +7,12 @@ const PORT = process.env.PORT
   ? parseInt(process.env.PORT, 10)
   : process.env.API_PORT
     ? parseInt(process.env.API_PORT, 10)
-    : 3001;
+    : 10000;
 
 const app = createApp();
 
-const server = app.listen(PORT, () => {
-  logger.info(`API service started on port ${PORT}`);
+const server = app.listen(PORT, '0.0.0.0', () => {
+  logger.info(`API service started on port ${PORT} on 0.0.0.0`);
 });
 
 // Graceful shutdown handling
