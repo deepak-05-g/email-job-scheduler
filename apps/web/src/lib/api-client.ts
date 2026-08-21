@@ -35,31 +35,51 @@ export const fetchApi = async <T>(endpoint: string, options: RequestInit = {}): 
     'Content-Type': 'application/json',
   };
 
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      ...defaultHeaders,
-      ...options.headers,
-    },
-    credentials: 'include',
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-  if (!response.ok) {
-    let errorData: ApiErrorResponse | null = null;
-    try {
-      errorData = (await response.json()) as ApiErrorResponse;
-    } catch {
-      // Failed to parse JSON error response
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: options.signal || controller.signal,
+      headers: {
+        ...defaultHeaders,
+        ...options.headers,
+      },
+      credentials: 'include',
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      let errorData: ApiErrorResponse | null = null;
+      try {
+        errorData = (await response.json()) as ApiErrorResponse;
+      } catch {
+        // Failed to parse JSON error response
+      }
+
+      const message = errorData?.error?.message || `HTTP error ${response.status}`;
+      const code = errorData?.error?.code;
+      const details = errorData?.error?.details;
+
+      throw new ApiClientError(message, response.status, code, details);
     }
 
-    const message = errorData?.error?.message || `HTTP error ${response.status}`;
-    const code = errorData?.error?.code;
-    const details = errorData?.error?.details;
-
-    throw new ApiClientError(message, response.status, code, details);
+    return response.json() as Promise<T>;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err instanceof ApiClientError) throw err;
+    throw new ApiClientError(
+      err instanceof Error && err.name === 'AbortError'
+        ? 'Request timed out connecting to API server'
+        : err instanceof Error
+          ? err.message
+          : 'Network error',
+      0,
+      'NETWORK_ERROR'
+    );
   }
-
-  return response.json() as Promise<T>;
 };
 
 // Auth APIs

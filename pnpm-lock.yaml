@@ -54,6 +54,18 @@ importers:
       '@email-scheduler/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@types/cookie-parser':
+        specifier: ^1.4.8
+        version: 1.4.10(@types/express@5.0.6)
+      '@types/cors':
+        specifier: ^2.8.17
+        version: 2.8.19
+      '@types/express':
+        specifier: ^5.0.0
+        version: 5.0.6
+      '@types/node':
+        specifier: ^22.10.7
+        version: 22.20.1
       cookie-parser:
         specifier: ^1.4.7
         version: 1.4.7
@@ -73,18 +85,6 @@ importers:
         specifier: ^3.24.1
         version: 3.25.76
     devDependencies:
-      '@types/cookie-parser':
-        specifier: ^1.4.8
-        version: 1.4.10(@types/express@5.0.6)
-      '@types/cors':
-        specifier: ^2.8.17
-        version: 2.8.19
-      '@types/express':
-        specifier: ^5.0.0
-        version: 5.0.6
-      '@types/node':
-        specifier: ^22.10.7
-        version: 22.20.1
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.3
@@ -173,6 +173,12 @@ importers:
       '@email-scheduler/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@types/node':
+        specifier: ^22.10.7
+        version: 22.20.1
+      '@types/nodemailer':
+        specifier: ^8.0.1
+        version: 8.0.1
       bullmq:
         specifier: ^5.34.8
         version: 5.81.3
@@ -186,12 +192,6 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
     devDependencies:
-      '@types/node':
-        specifier: ^22.10.7
-        version: 22.20.1
-      '@types/nodemailer':
-        specifier: ^8.0.1
-        version: 8.0.1
       tsx:
         specifier: ^4.19.2
         version: 4.23.12
@@ -201,6 +201,9 @@ importers:
 
   packages/config:
     dependencies:
+      '@types/node':
+        specifier: ^22.10.7
+        version: 22.20.1
       dotenv:
         specifier: ^16.4.7
         version: 16.6.1
@@ -219,6 +222,12 @@ importers:
       '@prisma/client':
         specifier: ^6.2.1
         version: 6.19.3(prisma@6.19.3(typescript@5.9.3))(typescript@5.9.3)
+      '@types/node':
+        specifier: ^22.10.7
+        version: 22.20.1
+      '@types/pg':
+        specifier: ^8.23.1
+        version: 8.23.1
       dotenv:
         specifier: ^16.4.7
         version: 16.6.1
@@ -232,12 +241,6 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
     devDependencies:
-      '@types/node':
-        specifier: ^22.10.7
-        version: 22.20.1
-      '@types/pg':
-        specifier: ^8.23.1
-        version: 8.23.1
       tsx:
         specifier: ^4.19.2
         version: 4.23.12
@@ -250,9 +253,9 @@ importers:
       '@email-scheduler/config':
         specifier: workspace:*
         version: link:../config
-      '@email-scheduler/shared':
-        specifier: workspace:*
-        version: link:../shared
+      '@types/node':
+        specifier: ^22.10.7
+        version: 22.20.1
       bullmq:
         specifier: ^5.34.8
         version: 5.81.3
@@ -266,9 +269,6 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
     devDependencies:
-      '@types/node':
-        specifier: ^22.10.7
-        version: 22.20.1
       vitest:
         specifier: ^3.0.4
         version: 3.2.7(@types/node@22.20.1)(happy-dom@17.6.3)(jiti@2.7.0)(jsdom@26.1.0)(tsx@4.23.12)

@@ -42,7 +42,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const loginWithGoogle = () => {
-    const apiBase = (import.meta.env.VITE_API_PUBLIC_URL as string) || 'http://localhost:3001';
+    const apiBase =
+      (import.meta.env.VITE_API_PUBLIC_URL as string) ||
+      (import.meta.env.VITE_API_URL as string) ||
+      'http://localhost:3001';
     window.location.href = `${apiBase}/api/v1/auth/google`;
   };
 
