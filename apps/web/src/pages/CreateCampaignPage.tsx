@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createCampaign, ApiClientError } from '../lib/api-client.js';
+import { useAuth } from '../hooks/useAuth.js';
 import { parseLeadFile, combineLeadSources, LeadParseResult } from '../lib/lead-parser.js';
 import {
   ArrowLeft,
@@ -31,6 +32,7 @@ import {
 
 export const CreateCampaignPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form Fields
@@ -325,7 +327,7 @@ export const CreateCampaignPage: React.FC = () => {
         <div className="flex items-center gap-4 py-2 border-b border-gray-100">
           <span className="text-xs font-medium text-gray-400 w-12 shrink-0">From</span>
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-50 border border-gray-200 rounded-full text-xs font-medium text-gray-800">
-            <span>default.sender@ethereal.email</span>
+            <span>{user?.email || 'hosea32@ethereal.email'}</span>
             <ChevronDown className="w-3 h-3 text-gray-400" />
           </div>
         </div>
