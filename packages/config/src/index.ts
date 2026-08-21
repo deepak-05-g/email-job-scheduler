@@ -49,10 +49,10 @@ export const envSchema = z.object({
   // Ethereal SMTP Fallback for Development & Testing
   ETHEREAL_HOST: z.string().default('smtp.ethereal.email'),
   ETHEREAL_PORT: z.coerce.number().default(587),
-  ETHEREAL_USER: z.string().default('your-ethereal-user'),
-  ETHEREAL_PASS: z.string().default('your-ethereal-pass'),
+  ETHEREAL_USER: z.string().default('hosea32@ethereal.email'),
+  ETHEREAL_PASS: z.string().default('WPUNmEzYDeXA5sdcdY'),
   ETHEREAL_SECURE: z.coerce.boolean().default(false),
-  DEFAULT_FROM_EMAIL: z.string().default('noreply@emailscheduler.com'),
+  DEFAULT_FROM_EMAIL: z.string().default('hosea32@ethereal.email'),
   DEFAULT_FROM_NAME: z.string().default('Email Scheduler'),
 
   WORKER_CONCURRENCY: z.coerce.number().default(5),

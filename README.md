@@ -184,9 +184,9 @@ cp .env.example .env
 | `GOOGLE_CLIENT_ID` | Yes | Google Cloud OAuth 2.0 Web Client ID | `xxx.apps.googleusercontent.com` |
 | `GOOGLE_CLIENT_SECRET` | Yes | Google Cloud OAuth 2.0 Client Secret | `GOCSPX-xxx` |
 | `GOOGLE_CALLBACK_URL` | Yes | Authorized OAuth redirect URI | `https://email-job-scheduler-576n.onrender.com/api/v1/auth/google/callback` |
-| `SESSION_SECRET` | Yes | 32+ character random secret for session encryption | `9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a...` |
-| `ETHEREAL_USER` | No | Ethereal SMTP username (auto-generated if empty) | `ethereal.user@ethereal.email` |
-| `ETHEREAL_PASS` | No | Ethereal SMTP password | `etherealPassword123` |
+| `ETHEREAL_USER` | No | Ethereal SMTP username (auto-generated if empty) | `hosea32@ethereal.email` |
+| `ETHEREAL_PASS` | No | Ethereal SMTP password | `WPUNmEzYDeXA5sdcdY` |
+| `DEFAULT_FROM_EMAIL` | No | Default From email address | `hosea32@ethereal.email` |
 | `WORKER_CONCURRENCY` | No | Concurrent email jobs per worker | `5` |
 | `MIN_SEND_DELAY_MS` | No | Minimum spacing between emails from same sender | `2000` |
 | `MAX_EMAILS_PER_HOUR` | No | Max emails allowed per hour (Queue rate limiter) | `100` |
