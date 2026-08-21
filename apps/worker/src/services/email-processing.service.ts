@@ -55,7 +55,7 @@ export class EmailProcessingService {
 
     // 3. Stale Processing Verification
     const now = Date.now();
-    const staleThresholdMs = env.WORKER_STALE_PROCESSING_MS || 300000;
+    const staleThresholdMs = env.WORKER_STALE_PROCESSING_MS || 30000;
 
     if (email.status === 'PROCESSING' && email.processingStartedAt) {
       const leaseAge = now - email.processingStartedAt.getTime();
