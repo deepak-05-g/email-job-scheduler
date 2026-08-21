@@ -1,0 +1,109 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: email_scheduler_postgres_prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-scheduler}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-scheduler}
+      POSTGRES_DB: ${POSTGRES_DB:-email_scheduler}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${POSTGRES_USER:-scheduler} -d ${POSTGRES_DB:-email_scheduler}',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: email_scheduler_redis_prod
+    restart: always
+    command: redis-server --appendonly yes
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_prod_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: email_scheduler_api_prod
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      API_PORT: 3001
+      DATABASE_URL: postgresql://${POSTGRES_USER:-scheduler}:${POSTGRES_PASSWORD:-scheduler}@postgres:5432/${POSTGRES_DB:-email_scheduler}?schema=public
+      REDIS_URL: redis://redis:6379
+      API_PUBLIC_URL: ${API_PUBLIC_URL:-http://localhost:3001}
+      WEB_PUBLIC_URL: ${WEB_PUBLIC_URL:-http://localhost:3000}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      SESSION_SECRET: ${SESSION_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL}
+    ports:
+      - '3001:3001'
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: email_scheduler_worker_prod
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-scheduler}:${POSTGRES_PASSWORD:-scheduler}@postgres:5432/${POSTGRES_DB:-email_scheduler}?schema=public
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_SECURE: ${SMTP_SECURE}
+      ETHEREAL_HOST: ${ETHEREAL_HOST:-smtp.ethereal.email}
+      ETHEREAL_PORT: ${ETHEREAL_PORT:-587}
+      ETHEREAL_USER: ${ETHEREAL_USER}
+      ETHEREAL_PASS: ${ETHEREAL_PASS}
+      WORKER_CONCURRENCY: ${WORKER_CONCURRENCY:-5}
+      MIN_SEND_DELAY_MS: ${MIN_SEND_DELAY_MS:-2000}
+      MAX_EMAILS_PER_HOUR: ${MAX_EMAILS_PER_HOUR:-100}
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        VITE_API_PUBLIC_URL: ${API_PUBLIC_URL:-http://localhost:3001}
+    container_name: email_scheduler_web_prod
+    restart: always
+    depends_on:
+      - api
+    ports:
+      - '3000:80'
+
+volumes:
+  postgres_prod_data:
+  redis_prod_data:

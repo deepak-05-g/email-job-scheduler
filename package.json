@@ -1,0 +1,28 @@
+{
+  "name": "email-scheduler-monorepo",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "pnpm --parallel run dev",
+    "build": "pnpm --recursive run build",
+    "lint": "eslint .",
+    "typecheck": "pnpm --recursive run typecheck",
+    "test": "pnpm --recursive run test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:migrate:deploy": "pnpm --filter @email-scheduler/db run db:migrate:deploy"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/node": "^22.10.7",
+    "eslint": "^9.18.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  }
+}

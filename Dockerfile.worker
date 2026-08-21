@@ -1,0 +1,33 @@
+# syntax=docker/dockerfile:1
+FROM node:20-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+FROM base AS builder
+WORKDIR /app
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY packages/ ./packages/
+COPY apps/api/ ./apps/api/
+COPY apps/worker/ ./apps/worker/
+COPY apps/web/ ./apps/web/
+
+RUN pnpm install --frozen-lockfile
+RUN pnpm --filter @email-scheduler/db run build
+RUN pnpm --filter @email-scheduler/worker run build
+
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY packages/ ./packages/
+COPY apps/worker/ ./apps/worker/
+
+RUN pnpm install --prod --frozen-lockfile
+COPY --from=builder /app/packages/config/dist ./packages/config/dist
+COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
+COPY --from=builder /app/packages/db/dist ./packages/db/dist
+COPY --from=builder /app/packages/queue/dist ./packages/queue/dist
+COPY --from=builder /app/apps/worker/dist ./apps/worker/dist
+
+CMD ["node", "apps/worker/dist/worker.js"]
